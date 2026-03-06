@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ヨルアソビ | マルチプレイホラーゲーム</title>
+  <meta
+    name="description"
+    content="あの懐かしい遊びをホラーゲームで、みんなと。閉校した小学校を舞台にしたマルチプレイホラーゲーム『ヨルアソビ』の紹介ページ。"
+  />
+  <style>
+    :root {
+      --bg: #060607;
+      --panel: rgba(18, 18, 22, 0.82);
+      --line: rgba(255, 255, 255, 0.09);
+      --text: #f5f1eb;
+      --muted: #b8b1a8;
+      --accent: #c42a2a;
+      --accent-soft: rgba(196, 42, 42, 0.18);
+      --gold: #f0d6a5;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans",
+        "Yu Gothic", "Meiryo", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 20% 10%, rgba(148, 18, 18, 0.22), transparent 35%),
+        radial-gradient(circle at 80% 20%, rgba(255, 255, 255, 0.05), transparent 20%),
+        linear-gradient(180deg, #09090b 0%, #050506 50%, #0b0707 100%);
+      line-height: 1.7;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background:
+        linear-gradient(
+          rgba(255, 255, 255, 0.02),
+          rgba(255, 255, 255, 0) 30%,
+          rgba(255, 255, 255, 0.015) 60%,
+          rgba(255, 255, 255, 0)
+        );
+      mix-blend-mode: screen;
+      opacity: 0.3;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .container {
+      width: min(1120px, calc(100% - 40px));
+      margin: 0 auto;
+    }
+
+    nav {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 2;
+    }
+
+    .nav-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 24px 0;
+    }
+
+    .brand {
+      font-weight: 800;
+      letter-spacing: 0.25em;
+      font-size: 0.95rem;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 24px;
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    header {
+      position: relative;
+      min-height: 100vh;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+    }
+
+    header::before,
+    header::after {
+      content: "";
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(80px);
+      opacity: 0.25;
+      pointer-events: none;
+    }
+
+    header::before {
+      width: 420px;
+      height: 420px;
+      right: -120px;
+      top: 80px;
+      background: rgba(196, 42, 42, 0.25);
+      animation: floatFog 9s ease-in-out infinite;
+    }
+
+    header::after {
+      width: 360px;
+      height: 360px;
+      left: -100px;
+      bottom: 20px;
+      background: rgba(255, 255, 255, 0.07);
+      animation: floatFog 11s ease-in-out infinite reverse;
+    }
+
+    @keyframes floatFog {
+      0%, 100% {
+        transform: translateY(0) translateX(0);
+      }
+      50% {
+        transform: translateY(18px) translateX(8px);
+      }
+    }
+
+    .hero {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 32px;
+      align-items: end;
+      padding: 120px 0 84px;
+    }
+
+    .kicker {
+      display: inline-block;
+      padding: 8px 14px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.03);
+      color: var(--gold);
+      font-size: 0.82rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      font-size: clamp(2.8rem, 7vw, 5.8rem);
+      line-height: 1.04;
+      margin: 18px 0;
+      letter-spacing: 0.02em;
+    }
+
+    .lead {
+      max-width: 38rem;
+      color: var(--muted);
+      font-size: 1.05rem;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 14px;
+      margin-top: 30px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      padding: 14px 22px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.04);
+      transition: 0.25s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      border-color: rgba(255, 255, 255, 0.2);
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    .btn.primary {
+      background: linear-gradient(135deg, #b11f1f, #621010);
+      border-color: rgba(255, 255, 255, 0.14);
+    }
+
+    .hero-card {
+      padding: 26px;
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0.03));
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
+      backdrop-filter: blur(10px);
+    }
+
+    .hero-card h2 {
+      margin: 0 0 14px;
+      font-size: 1.2rem;
+    }
+
+    .meta {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      margin-top: 20px;
+    }
+
+    .meta div {
+      padding: 14px;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: rgba(0, 0, 0, 0.18);
+    }
+
+    .meta strong {
+      display: block;
+      font-size: 1.2rem;
+      color: var(--gold);
+    }
+
+    section {
+      padding: 88px 0;
+    }
+
+    .section-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 18px;
+      align-items: end;
+      margin-bottom: 28px;
+    }
+
+    .section-head h2 {
+      font-size: clamp(1.8rem, 3vw, 3rem);
+      margin: 0;
+    }
+
+    .section-head p {
+      max-width: 40rem;
+      color: var(--muted);
+      margin: 0;
+    }
+
+    .story-wrap,
+    .cta-box {
+      padding: 32px;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 28px;
+      box-shadow: 0 18px 48px rgba(0, 0, 0, 0.28);
+    }
+
+    .story-grid,
+    .grid-3 {
+      display: grid;
+      gap: 18px;
+    }
+
+    .story-grid {
+      grid-template-columns: 1.1fr 0.9fr;
+      align-items: stretch;
+    }
+
+    .quote {
+      padding: 24px;
+      border-radius: 24px;
+      background: linear-gradient(180deg, rgba(196, 42, 42, 0.12), rgba(255, 255, 255, 0.03));
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .quote .big {
+      font-size: 1.8rem;
+      line-height: 1.4;
+      margin: 0 0 10px;
+      color: var(--gold);
+    }
+
+    .grid-3 {
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    .card {
+      padding: 24px;
+      border-radius: 24px;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.22);
+    }
+
+    .card h3 {
+      margin-top: 0;
+      font-size: 1.25rem;
+    }
+
+    .card p {
+      margin-bottom: 0;
+      color: var(--muted);
+    }
+
+    .label {
+      display: inline-block;
+      padding: 6px 10px;
+      font-size: 0.82rem;
+      border-radius: 999px;
+      color: var(--gold);
+      border: 1px solid rgba(240, 214, 165, 0.25);
+      background: rgba(240, 214, 165, 0.06);
+      margin-bottom: 14px;
+    }
+
+    .mode-card {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .mode-card::after {
+      content: "";
+      position: absolute;
+      inset: auto -20px -40px auto;
+      width: 140px;
+      height: 140px;
+      background: radial-gradient(circle, rgba(196, 42, 42, 0.25), transparent 70%);
+    }
+
+    .highlight {
+      color: var(--gold);
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+      margin-top: 22px;
+    }
+
+    .stats .item {
+      padding: 18px;
+      text-align: center;
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      background: rgba(255, 255, 255, 0.03);
+    }
+
+    .stats strong {
+      display: block;
+      font-size: 1.4rem;
+      margin-bottom: 4px;
+    }
+
+    .cta-box {
+      text-align: center;
+      background:
+        radial-gradient(circle at top, rgba(196, 42, 42, 0.18), transparent 45%),
+        linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.03));
+    }
+
+    .cta-box h2 {
+      font-size: clamp(2rem, 4vw, 3.6rem);
+      margin: 0 0 12px;
+    }
+
+    .cta-box p {
+      max-width: 42rem;
+      margin: 0 auto 24px;
+      color: var(--muted);
+    }
+
+    footer {
+      padding: 26px 0 44px;
+      color: #9c948d;
+    }
+
+    footer .container {
+      display: flex;
+      justify-content: space-between;
+      gap: 14px;
+      flex-wrap: wrap;
+      border-top: 1px solid var(--line);
+      padding-top: 24px;
+    }
+
+    .small {
+      font-size: 0.92rem;
+    }
+
+    @media (max-width: 960px) {
+      .hero,
+      .story-grid,
+      .grid-3 {
+        grid-template-columns: 1fr;
+      }
+
+      .stats {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .section-head {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .nav-inner {
+        flex-direction: column;
+        gap: 12px;
+      }
+
+      .nav-links {
+        gap: 16px;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+
+      .container {
+        width: min(1120px, calc(100% - 24px));
+      }
+
+      header {
+        min-height: auto;
+      }
+
+      .hero {
+        padding: 110px 0 60px;
+      }
+
+      .meta,
+      .stats {
+        grid-template-columns: 1fr;
+      }
+
+      h1 {
+        font-size: clamp(2.3rem, 12vw, 4rem);
+      }
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <div class="container nav-inner">
+      <a class="brand" href="#">YORU ASOBI</a>
+      <div class="nav-links">
+        <a href="#story">物語</a>
+        <a href="#modes">遊び方</a>
+        <a href="#features">特徴</a>
+        <a href="#cta">参加する</a>
+      </div>
+    </div>
+  </nav>
+
+  <header>
+    <div class="container hero">
+      <div>
+        <span class="kicker">Multiplayer Horror Game</span>
+        <h1>あの懐かしい遊びを<br />ホラーゲームで、みんなと。</h1>
+        <p class="lead">
+          閉校した小学校を舞台に、かくれんぼ、鬼ごっこ、だるまさんがころんだが
+          “夜のルール”でよみがえる。協力して逃げるか、声を上げて見つかるか。
+          友だちと遊ぶほど、怖さは深くなる。
+        </p>
+        <div class="hero-actions">
+          <a class="btn primary" href="#cta">今すぐチェック</a>
+          <a class="btn" href="#modes">ゲーム内容を見る</a>
+        </div>
+      </div>
+
+      <aside class="hero-card">
+        <h2>深夜0時、校内放送が始まる。</h2>
+        <p class="lead" style="margin: 0;">
+          廃校に忍び込んだ4人の前に現れたのは、子どもの遊びを歪めた“夜の先生”。
+          生き残る条件はただひとつ。<span class="highlight">最後まで遊びきること。</span>
+        </p>
+        <div class="meta">
+          <div><strong>1〜4人</strong>オンライン協力プレイ</div>
+          <div><strong>15〜25分</strong>1セッションの目安</div>
+          <div><strong>3つの遊び</strong>毎回変わる恐怖演出</div>
+          <div><strong>日本語対応</strong>ボイスチャット推奨</div>
+        </div>
+      </aside>
+    </div>
+  </header>
+
+  <main>
+    <section id="story">
+      <div class="container">
+        <div class="section-head">
+          <h2>物語</h2>
+          <p>
+            懐かしい思い出が残るはずの校舎は、夜になると別の顔を見せる。笑い声、足音、チャイム。どれももう、安心できる音ではない。
+          </p>
+        </div>
+
+        <div class="story-grid">
+          <div class="story-wrap">
+            <p>
+              夏休みの終わり、取り壊しが決まった旧・明暮小学校。
+              肝試しのつもりで足を踏み入れたあなたたちは、誰もいないはずの教室で
+              「はじめましょう」という校内放送を聞く。
+            </p>
+            <p>
+              始まるのは、子どものころ誰もが遊んだ懐かしい遊び。
+              けれど、隠れる場所には呼吸音が響き、止まるべき瞬間には背後で何かが笑う。
+              失敗したひとりから、順番に“向こう側”へ連れていかれる。
+            </p>
+            <p>
+              みんなで助かるためには、みんなで遊ぶしかない。
+              それでも、暗闇の中では友だちの声すら、安心の証拠にはならない。
+            </p>
+          </div>
+
+          <div class="quote">
+            <p class="big">「知っている遊びなのに、<br />こんなに怖い。」</p>
+            <p>
+              記憶にあるルールと、夜の校舎で変質したルール。
+              その差に気づいた瞬間から、このゲームは本気で牙をむく。
+            </p>
+            <div class="stats">
+              <div class="item"><strong>協力</strong>仲間と連携</div>
+              <div class="item"><strong>探索</strong>鍵と痕跡を発見</div>
+              <div class="item"><strong>回避</strong>音と視線を読む</div>
+              <div class="item"><strong>生還</strong>朝まで逃げきる</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="modes">
+      <div class="container">
+        <div class="section-head">
+          <h2>遊び方</h2>
+          <p>
+            昔は笑って遊べたルールが、ここでは命取りになる。ひとつ覚えていても、油断は禁物。夜の校庭は、いつも少しだけルールを変えてくる。
+          </p>
+        </div>
+
+        <div class="grid-3">
+          <article class="card mode-card">
+            <span class="label">Play 01</span>
+            <h3>かくれんぼ</h3>
+            <p>
+              ロッカー、机の下、体育倉庫。身を隠せる場所はあるが、安全な場所はない。
+              見つける側は、足音ではなく<span class="highlight">“息づかい”</span>を聞いている。
+            </p>
+          </article>
+
+          <article class="card mode-card">
+            <span class="label">Play 02</span>
+            <h3>だるまさんがころんだ</h3>
+            <p>
+              校内放送が止まるまで動いてはならない。
+              ただし、止まっている間にも何かは近づいてくる。
+              正しいのは、動かないことか、逃げることか。
+            </p>
+          </article>
+
+          <article class="card mode-card">
+            <span class="label">Play 03</span>
+            <h3>鬼ごっこ</h3>
+            <p>
+              “鬼”に触れられた仲間は消え、次の鬼になる。
+              誰かを置いていけば生き残れるのか。
+              それとも全員で走り抜けるしかないのか。
+            </p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="features">
+      <div class="container">
+        <div class="section-head">
+          <h2>特徴</h2>
+          <p>
+            驚かせるだけでは終わらない、友だちと一緒にいるからこそ成立する怖さを詰め込んだマルチプレイホラー体験。
+          </p>
+        </div>
+
+        <div class="grid-3">
+          <article class="card">
+            <span class="label">Co-op Fear</span>
+            <h3>ひとりより、みんなのほうが怖い</h3>
+            <p>
+              仲間の悲鳴、迷い、判断ミスが、そのまま恐怖になる。
+              助けるか、先に進むか。協力プレイだからこそ心が揺れる。
+            </p>
+          </article>
+
+          <article class="card">
+            <span class="label">Dynamic School</span>
+            <h3>毎回変わる校舎と演出</h3>
+            <p>
+              教室配置、鍵の場所、追跡ルート、出現演出がランダムに変化。
+              何度遊んでも、同じ深夜にはならない。
+            </p>
+          </article>
+
+          <article class="card">
+            <span class="label">Voice Recommended</span>
+            <h3>声がゲームそのものになる</h3>
+            <p>
+              ささやき声で位置を伝え、叫び声でパニックが広がる。
+              ボイスチャット推奨の設計で、会話そのものが体験を濃くする。
+            </p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="cta">
+      <div class="container">
+        <div class="cta-box">
+          <span class="kicker">Tonight, the bell will ring.</span>
+          <h2>遊ぶたび、思い出が恐怖に変わる。</h2>
+          <p>
+            『YORU ASOBI』は、懐かしい遊びをモチーフにした1〜4人向けマルチプレイホラーゲーム。
+            次の深夜、校内放送に呼ばれるのは、あなたたちかもしれない。
+          </p>
+          <div class="hero-actions" style="justify-content: center;">
+            <a class="btn primary" href="#">ウィッシュリストに追加</a>
+            <a class="btn" href="#">トレーラー公開予定</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container small">
+      <div>© YORU ASOBI / Multiplayer Horror Game</div>
+      <div>あの懐かしい遊びをホラーゲームで、みんなと。</div>
+    </div>
+  </footer>
+</body>
+</html>
